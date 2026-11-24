@@ -5,6 +5,7 @@ function exportBackup(){
   const data={people,hist,nextId};
   const json=JSON.stringify(data,null,2);
   const blob=new Blob([json],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
 }
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function color(v){if(v>=5000)return'#facc15';if(v>=1000)return'#22c55e';if(v>=0)return'#e5f8e8';if(v>-1000)return'#fce4ec';if(v>-5000)return'#ef4444';return'#800020'}
