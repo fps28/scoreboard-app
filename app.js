@@ -34,6 +34,7 @@ async function exportBackup(){
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 function restoreBackup(){
+  alert('Функция восстановления запустилась');
   const input=document.createElement('input');
   input.type='file';
   input.accept='.json,application/json';
