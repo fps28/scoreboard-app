@@ -1,16 +1,37 @@
 (()=> {
 const $=id=>document.getElementById(id);let people=[],hist=[],view='players',nextId=1;
 try{const saved=JSON.parse(localStorage.getItem('scoreboardData')||'null');if(saved){people=saved.people||[];hist=saved.hist||[];nextId=saved.nextId||1}}catch{}
-function exportBackup(){
+async function exportBackup(){
   const data={people,hist,nextId};
   const json=JSON.stringify(data,null,2);
+
+  if(window.Capacitor?.isNativePlatform()){
+    try{
+      const {Filesystem,Share}=Capacitor.Plugins;
+      const file=await Filesystem.writeFile({
+        path:'scoreboard-backup.json',
+        data:json,
+        directory:'CACHE'
+      });
+      await Share.share({
+        title:'Резервная копия Scoreboard',
+        url:file.uri
+      });
+    }catch(e){
+      alert('Ошибка экспорта: '+e.message);
+    }
+    return;
+  }
+
   const blob=new Blob([json],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url;
   a.download='scoreboard-backup.json';
+  document.body.appendChild(a);
   a.click();
-  URL.revokeObjectURL(url);
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function color(v){if(v>=5000)return'#facc15';if(v>=1000)return'#22c55e';if(v>=0)return'#e5f8e8';if(v>-1000)return'#fce4ec';if(v>-5000)return'#ef4444';return'#800020'}
