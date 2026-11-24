@@ -33,6 +33,44 @@ async function exportBackup(){
   a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
+function restoreBackup(){
+  const input=document.createElement('input');
+  input.type='file';
+  input.accept='.json,application/json';
+
+  input.onchange=()=>{
+    const file=input.files[0];
+    if(!file)return;
+
+    const reader=new FileReader();
+    reader.onload=()=>{
+      try{
+        const data=JSON.parse(reader.result);
+
+        if(!Array.isArray(data.people)||!Array.isArray(data.hist)||!Number.isInteger(data.nextId)){
+          alert('Неверный формат резервной копии');
+          return;
+        }
+
+        if(!confirm('Заменить текущие данные данными из резервной копии?')){
+          return;
+        }
+
+        people=data.people;
+        hist=data.hist;
+        nextId=data.nextId;
+        save();
+        render();
+        alert('Резервная копия восстановлена!');
+      }catch(e){
+        alert('Не удалось прочитать файл');
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  input.click();
+}
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function color(v){if(v>=5000)return'#facc15';if(v>=1000)return'#22c55e';if(v>=0)return'#e5f8e8';if(v>-1000)return'#fce4ec';if(v>-5000)return'#ef4444';return'#800020'}
 function save(){localStorage.setItem('scoreboardData',JSON.stringify({people,hist,nextId}))}
