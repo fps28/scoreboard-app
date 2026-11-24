@@ -33,7 +33,7 @@ if(!people.length){$('msg').innerHTML='<div class="msg">Добавь участ�
 if(total!==0){$('msg').innerHTML=`<div class="msg bad">❌ Баланс не сходится. Общая сумма: ${total>0?'+':''}${total}. Исправь изменения и попробуй снова.</div>`;return}
 let entries=[];people.forEach(p=>{let d=parseInt(p.pending)||0;if(d){p.score+=d;entries.push({id:p.id,delta:d,balance:p.score})}p.pending=0});
 if(entries.length){hist.push({time:new Date().toLocaleString(),entries});$('msg').innerHTML='<div class="msg good">✓ Изменения подтверждены и записаны в историю.</div>'}else $('msg').innerHTML='<div class="msg">Нет изменений для записи.</div>';
-$('add').onclick=()=>{
+save();render()}
 $('backup').onclick=exportBackup;
 $('add').onclick=()=>{let n=prompt('Имя участника:');if(n&&n.trim()){people.push({id:nextId++,name:n.trim(),score:0,pending:0});save();render()}};
 $('tabPlayers').onclick=()=>{view='players';render()};$('tabHistory').onclick=()=>{view='history';render()};
