@@ -63,9 +63,9 @@ function restoreBackup(){
         render();
         alert('Резервная копия восстановлена!');
       }catch(e){
-        alert('Не удалось прочитать файл');
-      }
-    };
+              }catch(e){
+        alert('Ошибка: '+e.message);
+      };
     reader.readAsText(file);
   };
 
