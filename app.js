@@ -8,14 +8,18 @@ async function exportBackup(){
   if(window.Capacitor?.isNativePlatform()){
     try{
       const {Filesystem,Share}=Capacitor.Plugins;
+
       const file=await Filesystem.writeFile({
         path:'scoreboard-backup.json',
         data:json,
-        directory:'CACHE'
+        directory:'CACHE',
+        encoding:'utf8'
       });
+
       await Share.share({
         title:'Резервная копия Scoreboard',
-        url:file.uri
+        files:[file.uri],
+        mimeType:'application/json'
       });
     }catch(e){
       alert('Ошибка экспорта: '+e.message);
@@ -33,6 +37,8 @@ async function exportBackup(){
   a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
+
+  
 function restoreBackup(){
   alert('Функция восстановления запустилась');
   const input=document.createElement('input');
