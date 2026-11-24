@@ -42,7 +42,7 @@ function restoreBackup(){
     const file=input.files[0];
     if(!file)return;
 
-    const reader=new FileReader();
+        const reader=new FileReader();
     reader.onload=()=>{
       try{
         const data=JSON.parse(reader.result);
@@ -62,9 +62,10 @@ function restoreBackup(){
         save();
         render();
         alert('Резервная копия восстановлена!');
-            }catch(e){
+      }catch(e){
         alert('Ошибка: '+e.message);
-      };
+      }
+    };
     reader.readAsText(file);
   };
 
