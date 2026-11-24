@@ -42,21 +42,6 @@ jobs:
           npx cap init Scoreboard com.fps28.scoreboard --web-dir=www
           npx cap add android
 
-      - name: Fix Kotlin dependency conflict
-        run: |
-          cat >> android/build.gradle <<'EOF'
-
-          allprojects {
-              configurations.all {
-                  resolutionStrategy.eachDependency {
-                      if (it.requested.group == 'org.jetbrains.kotlin') {
-                          it.useVersion '1.8.22'
-                      }
-                  }
-              }
-          }
-          EOF
-
       - name: Build APK
         run: |
           cd android
